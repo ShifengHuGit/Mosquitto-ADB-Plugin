@@ -1,0 +1,14 @@
+[
+  {
+    "Topic": "xxxxxxxx",
+    "Config": {
+      "DBName": "adb_test",
+      "DBUser": "admin",
+      "DBPassword": "---xxxxx---abcdefgqwerty----yyy---",
+      "Wallet": "/opt/oracle/wallets/adb",
+      "TNSName": "iotdatabase_medium",
+      "TableName": "log_table",
+      "LogPath": "/tmp/mosq_plugin.log"
+    }
+  }
+]
