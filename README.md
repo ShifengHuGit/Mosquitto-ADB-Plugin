@@ -1,39 +1,58 @@
 # Mosquitto-ADB-Plugin
-This is a Plugin for Mosquitto to insert the Topic Data to Oracle ADB
 
- Prerequisites:
-  Create ADB
-  Download the Wallet
-  Config the plugin-config.json properly 
-  Place the Wallet in the Correct location, and Update the sqlnet.ora file
-  Create ADB tables
+This is a plugin for [Mosquitto](https://mosquitto.org/) that inserts MQTT topic data into **Oracle Autonomous Database (ADB)**.
 
- use podman to build the image:
+---
 
- e.g. : podman build -f dockerfile  -t mosquitto-with-adb-plugin:0.1
+## ✨ Features
 
-start the docker image
+- ✅ Parses incoming MQTT messages
+- ✅ Extracts telemetry data
+- ✅ Inserts structured data into Oracle ADB using ODPI-C
+- ✅ Runs inside a minimal container (Debian-based with Instant Client)
 
- e.g. : podman run --rm -p 1883:1883 mosquitto-with-adb-plugin:
+---
 
-  outputs: 
-      1753772390: mosquitto version 2.0.11 starting
-      1753772390: Config loaded from /mosquitto/config/mosquitto.conf.
-      1753772390: Loading plugin: /mosquitto/plugins/mosq_adb_plugin.so
-      [PLUGIN INIT] Called mosquitto_plugin_init()
-      [PLUGIN INIT] Opt: config = /mosquitto/plugin-config.json
-      [PLUGIN INIT] config_file = /mosquitto/plugin-config.json
-      [PLUGIN INIT] log path = /tmp/mosq_plugin.log
-      [PLUGIN INIT] TNS NAME = iotdatabase_medium
-      [PLUGIN INIT] db user = admin
-      [PLUGIN INIT] wallet = /opt/oracle/wallets/adb
-      [ADB] === Starting IoT ADB connection ===
-      [ADB] db user: admin
-      [ADB] wallet path: /opt/oracle/wallets/adb
-      [ADB] TNS name: iotdatabase_medium
-      [ADB] dpiContext_create OK
-      [ADB] dpiContext_initCommonCreateParams OK
-      [ADB] dpiContext_initConnCreateParams OK
-      [ADB] TNS_ADMIN set to: /opt/oracle/wallets/adb
-      [ADB] Connection to ADB successful!
-      [PLUGIN INIT] Plugin initialized, registering callback...
+## 🧰 Prerequisites
+
+Before using the plugin, make sure you:
+
+1. ✅ **Create an Oracle ADB instance**
+2. ✅ **Download the Oracle Wallet** for that ADB
+3. ✅ **Create the required table** in ADB, e.g.:
+
+   ```sql
+   CREATE SEQUENCE telemetry_seq;
+
+   CREATE TABLE telemetry (
+     id        NUMBER PRIMARY KEY,
+     vin       VARCHAR2(64),
+     TripID    VARCHAR2(64),
+     date_event TIMESTAMP DEFAULT SYSTIMESTAMP,
+     data      CLOB
+   );
+ 4.	✅ Edit plugin-config.json with your config:
+      ```
+     {
+       "topic": "my/topic",
+       "dbUser": "admin",
+       "walletPath": "/opt/oracle/wallets/adb",
+       "tableName": "telemetry",
+       "logPath": "/tmp/mosq_plugin.log",
+       "tnsName": "your_tns_name"
+     }	
+
+5.	✅ Place the Oracle Wallet inside the Docker image:
+	•	Must be at: /opt/oracle/wallets/adb
+	•	Confirm sqlnet.ora exists and has correct paths
+ ---
+ ## 🐳 Building the Image with Podman
+ Use podman or docker to build the plugin container image:
+
+  ``` podman build -f Dockerfile -t mosquitto-with-adb-plugin:0.1 . ```
+ 
+ ## 🚀 Running the Plugin
+  To run the Mosquitto broker with the plugin:
+
+  ```  podman run --rm -p 1883:1883 mosquitto-with-adb-plugin:0.1```
+ 
