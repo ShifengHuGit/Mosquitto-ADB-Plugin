@@ -1,7 +1,14 @@
 # Mosquitto-ADB-Plugin
 This is a Plugin for Mosquitto to insert the Topic Data to Oracle ADB
 
-use podman to build the image:
+ Prerequisites:
+  Create ADB
+  Download the Wallet
+  Config the plugin-config.json properly 
+  Place the Wallet in the Correct location, and Update the sqlnet.ora file
+  Create ADB tables
+
+ use podman to build the image:
 
  e.g. : podman build -f dockerfile  -t mosquitto-with-adb-plugin:0.1
 
