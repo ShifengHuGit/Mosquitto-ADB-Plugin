@@ -1,0 +1,13 @@
+
+CREATE TABLE telemetry
+  (
+   id  number PRIMARY KEY,
+   vin         VARCHAR2(17),
+   TripID          VARCHAR2 (32),
+   date_event TIMESTAMP (6) WITH TIME ZONE,
+   data VARCHAR2 (23767)
+   CONSTRAINT ensure_json1 CHECK (data IS JSON));
+
+CREATE SEQUENCE telemetry_seq START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
+
+# drop TABLE telemetry ;
