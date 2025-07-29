@@ -35,7 +35,8 @@ Before using the plugin, make sure you:
       ```
      {
        "topic": "my/topic",
-       "dbUser": "admin",
+       "dbUser": "xxxxx",
+       "dbPassword":"xxxxxxxxx"
        "walletPath": "/opt/oracle/wallets/adb",
        "tableName": "telemetry",
        "logPath": "/tmp/mosq_plugin.log",
